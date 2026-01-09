@@ -43,7 +43,9 @@ Below are two examples demonstrating different layout configurations for single-
 For two-model comparison, the visualization layout is shown in the following example:
 <!-- Insert two-model comparison example image here -->
 
-### Setup and Usage
+---
+
+## Setup and Usage
 
 For detailed environment setup, dependency installation, and inference usage,
 please refer to the original BEVFusion repository.
