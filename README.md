@@ -26,5 +26,22 @@ tools/my_tools/
 ```
 ## Visualization Configuration
 Visualization behavior and layout are configurable through:
-```infer_cfg.yaml
+```text
+infer_cfg.yaml
 ```
+---
+##Visualization Examples
+#Single-Model Visualization
+Below are two examples demonstrating different layout configurations for single-model visualization:
+
+<!-- Insert single-model layout example images here -->
+
+##Two-Model Comparison Visualization
+
+For two-model comparison, the visualization layout is shown in the following example:
+<!-- Insert two-model comparison example image here -->
+
+###Setup and Usage
+
+For detailed environment setup, dependency installation, and inference usage,
+please refer to the original BEVFusion repository.
