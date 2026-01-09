@@ -1,0 +1,139 @@
+
+data_loader:
+  pkl_path:   ../data/nuscenes_full/nuscenes_infos_rain.pkl
+  cfg_path:   ./configs/nuscenes/det/transfusion/secfpn/camera+lidar/swint_v0p075/convfuser.yaml
+  bag_path:   to_be_added_later
+
+inference:
+  model_num:  1
+  models:
+    -
+        desc:       this model is used for det
+        cfg_path:   ./configs/nuscenes/det/centerhead/lssfpn/camera/256x704/swint/default.yaml
+        checkpoint: ../pretrained/camera-only-det.pth
+        type:       det
+
+        #desc:       this model is used for det
+        #cfg_path:   ./configs/nuscenes/det_cam/centerhead/lssfpn/camera/256x704/swint/default.yaml
+        #checkpoint: ./pretrained/camera-only-det.pth
+        #type:       det
+        #desc:       attention
+        #cfg_path:   ./configs/nuscenes/det/transfusion/secfpn/camera+lidar/swint_v0p075/crsattention.yaml
+        #checkpoint: ../pretrained/cam_attend_lidar_epoch_13_mAP6823.pth
+        #type:       det
+
+    -
+        #desc:       bevfusion
+        #cfg_path:   ./configs/nuscenes/det/transfusion/secfpn/camera+lidar/swint_v0p075/convfuser.yaml
+        #checkpoint: ./pretrained/bevfusion-det.pth
+        #type:       det
+
+
+        desc:       this model is used for det
+        cfg_path:   ./configs/nuscenes/det/centerhead/lssfpn/camera/256x704/swint/default.yaml
+        checkpoint: ../pretrained/camera-only-det.pth
+        type:       det
+
+        #desc:       attention
+        #cfg_path:   ./configs/nuscenes/det/transfusion/secfpn/camera+lidar/swint_v0p075/crsattfuser.yaml
+        #checkpoint: ./tools/abc/pth/bidirectional_attend_temporal_ban1_epoch_7_map6750.pth
+        #checkpoint: ./tools/abc/pth/cam_attend_lidar_epoch_13_mAP6823.pth
+        #type:       det
+        #desc:       this model is used for seg
+        #cfg_path:   ./configs/nuscenes/seg/fusion-bev256d2-lss.yaml
+        #checkpoint: ./pretrained/bevfusion-seg.pth
+        #type:       seg
+
+visualize:
+  config_to_use:  2
+  dataset_to_use: 1
+  det_score:      [0.1, 0.1]
+  seg_score:      [0.2, 0.2]
+  
+  dataset:        [bag, nuscenes]
+  
+  IMAGE_W:        [1280, 1600]
+  IMAGE_H:        [720,   900]
+  cam_order:      [ [0,1,2,3,4,5],            #BAG文件中image0-5在屏幕上显示顺序：[F_Left, F, F_Right, B_Left, Back, B_Right]
+                    [2,0,1,4,3,5],            #nuscenes 中image0-5在屏幕上的显示顺序：[F_Left, F, F_Right, B_Left, Back, B_Right]
+                                              #比如nuscenes image-2是B-Left. 
+                  ]
+  cam_index:      [ [0,1,2,3,4,5],            #BAG文件，从cam_order创建的index：
+                    [1,2,0,4,3,5],            #nuscenes 从cam_order创建的index：image-0在屏幕上顺序=1， image-1序号=2，image-2序号=0
+                  ]
+
+  configs:
+    - 
+        layout:           type0
+        show_map:         False                                                     
+        show_gt_bboxes:   False           
+
+        #################################################
+        # Image 1   #   Image 2   # Image 3   #         #
+        #######################################   MAP   #
+        # Image 4   #   Image 5   # Image 6   #         #
+        #################################################
+        #                                               #
+        #         Lidar                                 #
+        #         ...                                   #
+        #################################################
+
+    -
+        layout:         type1
+        show_gt_bboxes:   False            #显示真值
+        show_map:         False           #不显示MAP
+        #################################################
+        # Image 1   #   Image 1   #                     #
+        ###########################                     #
+        # Image 2   #   Image 2   #       gt lidar      #
+        ###########################                     #
+        # Image 3   #   Image 3   #                     #
+        #################################################
+        # Image 4   #   Image 4   #                     #
+        ###########################                     #
+        # Image 5   #   Image 5   #       det lidar     #
+        ###########################                     #
+        # Image 6   #   Image 6   #                     #
+        #################################################
+
+    -
+        layout:         type2
+        show_gt_bboxes:   True            #显示真值
+        show_map:         False           #不显示MAP
+        #################################################
+        # Image 1   #   Image 2   # Image 3   #         #
+        #######################################   MAP   #
+        # Image 4   #   Image 5   # Image 6   #         #
+        #################################################
+        # Image 1   #   Image 2   # Image 3   #         #
+        #######################################   MAP   #
+        # Image 4   #   Image 5   # Image 6   #         #
+        #################################################
+        #                      #                        #
+        #         Lidar        #      Lidar             #
+        #         ...          #                        #
+        #################################################
+
+
+      #---------------------------------------------------------------------------------
+      #1. 这个布局适合：
+      #   - 只跑一个推理模型，显示检测的bbox + Lidar, 此时请设置  show_map:False
+      #   - 或者1个推理+1个分割，显示检测的bbox + MAP Lidar. 此时请设置： show_map =True
+      #   - 如果显示map，它的显示尺寸为 1800x1800
+
+      #---------------------------------------------------------------------------------
+      #2. 这个布局适合：
+      #   - 只跑一个推理模型，显示Gt_bboxes+检测的bbox + Lidar. 需要设置show_gt_bboxes = True
+      #   - 或者2个推理，对比显示检测的bbox + Lidar. 需要设置show_gt_bboxes = False
+      #   - 不支持显示map, 请设置  show_map:False
+      #   - 如果show_gt_bboxes = True， 则
+      #           - 左边一列图像显示gt-box, 第二列图像显示det bbox, 右上雷达显示真值，右下显示检测结果
+      #   - 如果show_gt_bboxes = False， 则
+      #           - 左边一列图像显示第一个模型的检测, 第二列图像显示第二个模型的检测, 两个雷达都显示检测
+      #   -
+      #---------------------------------------------------------------------------------
+      #3. 这个布局适合：
+      #   - 只跑一个推理模型，显示Gt_bboxes+检测的bbox + Lidar. 需要设置show_gt_bboxes = True
+      #   - 或者2个推理，对比显示检测的bbox + Lidar. 需要设置show_gt_bboxes = False
+      #   - 或者1个检测+1个分割，检测结果+分割结果，对比检测真值+分割真值 (还不支持)
+      #   - 如果show_gt_bboxes = True， 则
