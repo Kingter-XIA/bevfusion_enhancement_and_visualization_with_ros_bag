@@ -23,7 +23,8 @@ All visualization-related logic is located in:
 
 ```text
 tools/my_tools/
----
+```
 ## Visualization Configuration
 Visualization behavior and layout are configurable through:
 ```infer_cfg.yaml
+```
