@@ -35,13 +35,14 @@ infer_cfg.yaml
 
 ### Single-Model Visualization
 Below are two examples demonstrating different layout configurations for single-model visualization:
+![Visualization of single model](images/single_model.png)
 
-
+![Visualization of single model](images/single_model2.png)
 
 ### Two-Model Comparison Visualization
 
 For two-model comparison, the visualization layout is shown in the following example:
-<!-- Insert two-model comparison example image here -->
+![Visualization of two model comarision](images/two_model_comarision.png)
 
 ---
 
