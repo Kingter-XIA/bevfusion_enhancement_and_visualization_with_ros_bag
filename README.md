@@ -13,7 +13,7 @@ It supports:
 The input to the visualization pipeline is a **recorded ROS bag file**.  
 The overall processing and visualization structure is illustrated in the diagram below:
 
-<!-- Insert architecture / pipeline diagram here -->
+![Visualization pipeline](images/flow.png)
 
 ---
 
@@ -36,7 +36,7 @@ infer_cfg.yaml
 ### Single-Model Visualization
 Below are two examples demonstrating different layout configurations for single-model visualization:
 
-<!-- Insert single-model layout example images here -->
+
 
 ### Two-Model Comparison Visualization
 
